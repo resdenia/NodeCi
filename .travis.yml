@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - '8'
+  # trusty linux machine
+dist: trusty
+services:
+  - mongodb
+  - redis-server
+  # env variables
+env:
+  - NODE_ENV=ci PORT=3000
+cache:
+  directories:
+    - node_modules
+    - client/node_modules
+install:
+  - npm install
+  - npm run build
+  # "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+script:
+  - nohup npm run start &
+  - sleep 3
+  - npm run test
+  # nohup - if the shell is closed, don't kill anything this command creates
+  # & - Run this command in subshell(in the background)
